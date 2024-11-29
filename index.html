@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elm Live Flight</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="elm"></div>
+    <script src="node_modules/elm-mapbox/dist/elm-mapbox.umd.js"></script>
+    <script src="main.js"></script>
+    <script>
+        elmMapbox.registerCustomElement({ token: "pk.eyJ1Ijoid2FsZXl6IiwiYSI6ImNtNDJ2NnFqcTA1c3cya3IxZGYzbjlka3oifQ.ACs-b_RW8zlW5yBDcGE3IA" });
+        var app = Elm.Main.init({
+            node: document.getElementById('elm')
+        });
+        elmMapbox.registerPorts(app);
+    </script>
+</body>
+</html>
