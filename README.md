@@ -39,6 +39,57 @@ This project leverages Elm's strengths to manage:
 - **User Interaction**: Handling events such as mouse hover and clicks on map features.
 - **Integration with JavaScript Libraries**: Utilizing `elm-mapbox` to integrate Mapbox GL JS into an Elm application.
 
+## Architecture
+
+The Elm Live Flight Tracker is designed following the Elm Architecture, which consists of three core parts: **Model**, **View**, and **Update**. Below is an explanation of how these components interact to create the application's workflow.
+
+```mermaid
+graph LR
+    Start[Start Application]
+    Start --> Init[Initialize Model and Fetch Aircraft Data]
+    Init --> Update
+    Update -->|GotAircrafts| UpdateModel[Update Model with New Data]
+    UpdateModel --> View
+    View --> UserInteraction{User Interaction?}
+    UserInteraction -->|Yes| Update
+    UserInteraction -->|No| Timer[Wait for Timer Tick]
+    Timer -->|Every 10s| Update
+```
+
+- **Initialization**
+
+  - **Application Start**: When the application loads, it initializes the `Model` with default values and sends an HTTP request to fetch aircraft data from the OpenSky Network API.
+  - **Initial Model State**:
+    - `position`: User's current position on the map.
+    - `aircrafts`: An empty list that will hold aircraft data.
+    - `selectedAircraft`: `Nothing` initially; will hold data of the selected aircraft upon user interaction.
+    - `selectedFeatureId`: `Nothing` initially; will track the ID of the selected map feature.
+
+- **Fetching Aircraft Data**
+
+  - **HTTP Request**: The application sends a GET request to the OpenSky Network API to retrieve the current state of all aircraft.
+  - **JSON Decoding**: Upon receiving a response, the application uses Elm's `Json.Decode` module to parse the JSON data into Elm types safely.
+
+- **Updating the Model**
+
+  - **Message Handling**: The `update` function handles the `GotAircrafts` message, which contains the result of the HTTP request. If the data is successfully fetched and decoded, the `Model` is updated with the new list of aircraft.
+
+- **Rendering the View**
+
+  - **Map Rendering**: The `view` function constructs the HTML to display the interactive map and any selected aircraft details.
+  - **Aircraft Display**: Aircraft are displayed on the map using Mapbox layers and symbols. The positions are updated based on the latest data in the `Model`.
+
+- **User Interaction**
+
+  - **Hover Events**: When the user hovers over an aircraft symbol, the application captures the event and updates the `Model` to reflect the current position.
+  - **Click Events**: Clicking on an aircraft symbol selects it, updating the `selectedAircraft` in the `Model`, which triggers the view to display detailed information.
+  - **Event Handling**: These interactions generate messages (`Hover`, `Click`) that the `update` function handles to update the `Model`.
+
+- **Periodic Data Updates**
+
+  - **Timer Subscription**: The application uses Elm's `Time.every` function to set up a subscription that triggers a `Tick` message every 10 seconds.
+  - **Refreshing Data**: The `update` function handles the `Tick` message by fetching new aircraft data, repeating the cycle.
+
 ## Installation
 
 ### Prerequisites
