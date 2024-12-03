@@ -17,8 +17,8 @@ style =
             [ Style.sprite "mapbox://sprites/mapbox/light-v9"
             , Style.glyphs "mapbox://fonts/mapbox/{fontstack}/{range}.pbf"
             , Style.name "Light"
-            , Style.defaultZoomLevel 1
-            , Style.defaultCenter <| LngLat 20.39789404164037 43.22523201923144
+            , Style.defaultZoomLevel 9
+            , Style.defaultCenter <| LngLat -74.0060 40.7128
             ]
         , layers =
             [ Layer.background "background" [ Layer.backgroundColor (E.rgba 245 245 243 1) ]
